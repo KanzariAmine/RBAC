@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const session = require("express-session");
 const connectFlash = require("connect-flash");
+const passport = require("passport");
 
 //Initialization
 const app = express();
@@ -26,6 +27,11 @@ app.use(
     },
   })
 );
+
+//For passport JS Auth
+app.use(passport.initialize());
+app.use(passport.session());
+require("./utils/passport.auth");
 
 //Flash Messages
 app.use(connectFlash());

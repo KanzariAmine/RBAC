@@ -2,6 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const User = require("../models/user.model");
 const { body, validationResult } = require("express-validator");
+const passport = require("passport");
 
 router.get("/login", (req, res, next) => {
   res.render("login");
@@ -11,9 +12,14 @@ router.get("/register", (req, res, next) => {
   res.render("register");
 });
 
-router.post("/login", (req, res, next) => {
-  res.send("Hello from Login router POST");
-});
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/user/profile",
+    failureRedirect: "/auth/login",
+    failureFlash: true,
+  })
+);
 
 router.post(
   "/register",
@@ -69,7 +75,8 @@ router.post(
 );
 
 router.get("/logout", (req, res, next) => {
-  res.send("Hello from Logout router POST");
+  req.logout();
+  res.redirect("/");
 });
 
 module.exports = router;
