@@ -4,16 +4,17 @@ const User = require("../models/user.model");
 const { body, validationResult } = require("express-validator");
 const passport = require("passport");
 
-router.get("/login", (req, res, next) => {
+router.get("/login", ensureNotAuthenticated, (req, res, next) => {
   res.render("login");
 });
 
-router.get("/register", (req, res, next) => {
+router.get("/register", ensureNotAuthenticated, (req, res, next) => {
   res.render("register");
 });
 
 router.post(
   "/login",
+  ensureNotAuthenticated,
   passport.authenticate("local", {
     successRedirect: "/user/profile",
     failureRedirect: "/auth/login",
@@ -23,6 +24,7 @@ router.post(
 
 router.post(
   "/register",
+  ensureNotAuthenticated,
   [
     body("email")
       .trim()
@@ -74,9 +76,24 @@ router.post(
   }
 );
 
-router.get("/logout", (req, res, next) => {
+router.get("/logout", ensureAuthenticated, (req, res, next) => {
   req.logout();
   res.redirect("/");
 });
 
 module.exports = router;
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.redirect("/auth/login");
+  }
+}
+
+function ensureNotAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    res.redirect("back");
+  } else {
+    next();
+  }
+}
