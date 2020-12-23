@@ -3,20 +3,30 @@ const router = Router();
 const User = require("../models/user.model");
 const { body, validationResult } = require("express-validator");
 const passport = require("passport");
+const connectEnsure = require("connect-ensure-login");
 
-router.get("/login", ensureNotAuthenticated, (req, res, next) => {
-  res.render("login");
-});
+router.get(
+  "/login",
+  connectEnsure.ensureLoggedOut({ redirectTo: "/" }),
+  (req, res, next) => {
+    res.render("login");
+  }
+);
 
-router.get("/register", ensureNotAuthenticated, (req, res, next) => {
-  res.render("register");
-});
+router.get(
+  "/register",
+  connectEnsure.ensureLoggedOut({ redirectTo: "/" }),
+  (req, res, next) => {
+    res.render("register");
+  }
+);
 
 router.post(
   "/login",
-  ensureNotAuthenticated,
+  connectEnsure.ensureLoggedOut({ redirectTo: "/" }),
   passport.authenticate("local", {
-    successRedirect: "/user/profile",
+    // successRedirect: "/",
+    successReturnToOrRedirect: "/",
     failureRedirect: "/auth/login",
     failureFlash: true,
   })
@@ -24,7 +34,7 @@ router.post(
 
 router.post(
   "/register",
-  ensureNotAuthenticated,
+  connectEnsure.ensureLoggedOut({ redirectTo: "/" }),
   [
     body("email")
       .trim()
@@ -76,24 +86,28 @@ router.post(
   }
 );
 
-router.get("/logout", ensureAuthenticated, (req, res, next) => {
-  req.logout();
-  res.redirect("/");
-});
+router.get(
+  "/logout",
+  connectEnsure.ensureLoggedIn({ redirectTo: "/" }),
+  (req, res, next) => {
+    req.logout();
+    res.redirect("/");
+  }
+);
 
 module.exports = router;
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    next();
-  } else {
-    res.redirect("/auth/login");
-  }
-}
+// function ensureAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()) {
+//     next();
+//   } else {
+//     res.redirect("/auth/login");
+//   }
+// }
 
-function ensureNotAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    res.redirect("back");
-  } else {
-    next();
-  }
-}
+// function ensureNotAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()) {
+//     res.redirect("back");
+//   } else {
+//     next();
+//   }
+// }

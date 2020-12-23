@@ -7,6 +7,7 @@ const session = require("express-session");
 const connectFlash = require("connect-flash");
 const passport = require("passport");
 const connectMongo = require("connect-mongo");
+const connectEnsureLogin = require("connect-ensure-login");
 
 //Initialization
 const app = express();
@@ -53,7 +54,11 @@ app.use((req, res, next) => {
 //Routers
 app.use("/", require("./routes/index.route"));
 app.use("/auth", require("./routes/auth.route"));
-app.use("/user", ensureAuthenticated, require("./routes/user.route"));
+app.use(
+  "/user",
+  connectEnsureLogin.ensureLoggedIn({ redirectTo: "/auth/login" }),
+  require("./routes/user.route")
+);
 
 app.use((req, res, next) => {
   next(createError.NotFound());
@@ -81,11 +86,11 @@ mongoose
   })
   .catch((error) => console.error(error.message));
 
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    console.log("hello");
-    next();
-  } else {
-    res.redirect("/auth/login");
-  }
-}
+// function ensureAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()) {
+//     console.log("hello");
+//     next();
+//   } else {
+//     res.redirect("/auth/login");
+//   }
+// }
