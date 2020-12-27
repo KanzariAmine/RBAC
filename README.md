@@ -15,7 +15,7 @@ i use passport-local strategies
 
 - <img align="left" alt="Redis" width="26px" src="https://avatars0.githubusercontent.com/u/1160530?s=200&v=4" />passport JS
 
-- <img align="left" alt="Redis" width="26px" src="https://www.vhv.rs/viewpic/TRhxRbT_logo-ejs-logo-png-transparent-png/" />EJS
+- <img align="left" alt="Redis" width="26px" src="https://cdn.icon-icons.com/icons2/2107/PNG/512/file_type_ejs_icon_130626.png/" />EJS
 
 
 ## Installation
