@@ -1,6 +1,6 @@
 # Role Based Access Control (RBAC)
-For this identification I have only (Email & Password) and
-I use passport-local strategies
+For this authentication I have only (Email & Password) and
+i use passport-local strategies
 
 
 ## Technologies Used
@@ -15,12 +15,15 @@ I use passport-local strategies
 
 - <img align="left" alt="Redis" width="26px" src="https://avatars0.githubusercontent.com/u/1160530?s=200&v=4" />passport JS
 
+- <img align="left" alt="Redis" width="26px" src="https://icon-icons.com/icon/file-type-ejs/130626" />EJS
+
+
 ## Installation
 
 #### Step 1: Clone the repo
 
 ```sh
-$ https://github.com/KanzariAmine/RBAC.git
+$ https://github.com/KanzariAmine/RBAC-Authentication.git
 ```
 
 #### Step 2: Install the dependencies
