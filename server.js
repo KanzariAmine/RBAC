@@ -7,7 +7,7 @@ const session = require("express-session");
 const connectFlash = require("connect-flash");
 const passport = require("passport");
 const connectMongo = require("connect-mongo");
-const connectEnsureLogin = require("connect-ensure-login");
+const { ensureLoggedIn } = require("connect-ensure-login");
 const { roles } = require("./utils/Constants");
 //Initialization
 const app = express();
@@ -56,14 +56,14 @@ app.use("/", require("./routes/index.route"));
 app.use("/auth", require("./routes/auth.route"));
 app.use(
   "/user",
-  connectEnsureLogin.ensureLoggedIn({ redirectTo: "/auth/login" }),
+  ensureLoggedIn({ redirectTo: "/auth/login" }),
   require("./routes/user.route")
 );
 
 //Handle ADMIN
 app.use(
   "/admin",
-  connectEnsureLogin.ensureLoggedIn({ redirectTo: "/auth/login" }),
+  ensureLoggedIn({ redirectTo: "/auth/login" }),
   ensureAdmin,
   require("./routes/admin.route")
 );

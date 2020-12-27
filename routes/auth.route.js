@@ -1,21 +1,18 @@
 const { Router } = require("express");
 const router = Router();
 const User = require("../models/user.model");
-const { body, validationResult } = require("express-validator");
+const { validationResult } = require("express-validator");
 const passport = require("passport");
-const connectEnsure = require("connect-ensure-login");
+const { ensureLoggedOut, ensureLoggedIn } = require("connect-ensure-login");
+const { registerValidator } = require("../utils/validators");
 
-router.get(
-  "/login",
-  connectEnsure.ensureLoggedOut({ redirectTo: "/" }),
-  (req, res, next) => {
-    res.render("login");
-  }
-);
+router.get("/login", ensureLoggedOut({ redirectTo: "/" }), (req, res, next) => {
+  res.render("login");
+});
 
 router.get(
   "/register",
-  connectEnsure.ensureLoggedOut({ redirectTo: "/" }),
+  ensureLoggedOut({ redirectTo: "/" }),
   (req, res, next) => {
     res.render("register");
   }
@@ -23,7 +20,7 @@ router.get(
 
 router.post(
   "/login",
-  connectEnsure.ensureLoggedOut({ redirectTo: "/" }),
+  ensureLoggedOut({ redirectTo: "/" }),
   passport.authenticate("local", {
     // successRedirect: "/",
     successReturnToOrRedirect: "/",
@@ -34,25 +31,8 @@ router.post(
 
 router.post(
   "/register",
-  connectEnsure.ensureLoggedOut({ redirectTo: "/" }),
-  [
-    body("email")
-      .trim()
-      .isEmail()
-      .withMessage("Invalid Email")
-      .normalizeEmail()
-      .toLowerCase(),
-    body("password")
-      .trim()
-      .isLength(2)
-      .withMessage("Password length short, min 2 char required"),
-    body("password2").custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("Password do not match");
-      }
-      return true;
-    }),
-  ],
+  ensureLoggedOut({ redirectTo: "/" }),
+  registerValidator,
   async (req, res, next) => {
     try {
       const errors = validationResult(req);
@@ -86,14 +66,10 @@ router.post(
   }
 );
 
-router.get(
-  "/logout",
-  connectEnsure.ensureLoggedIn({ redirectTo: "/" }),
-  (req, res, next) => {
-    req.logout();
-    res.redirect("/");
-  }
-);
+router.get("/logout", ensureLoggedIn({ redirectTo: "/" }), (req, res, next) => {
+  req.logout();
+  res.redirect("/");
+});
 
 module.exports = router;
 // function ensureAuthenticated(req, res, next) {
