@@ -1,7 +1,7 @@
 # Role Based Access Control (RBAC)
-> For this authantification i have only Email & Password
+For this identification I have only Email & Password
+I use passport-local strategies
 
-> I use passport-local strategie 
 
 ## Technologies Used
 
