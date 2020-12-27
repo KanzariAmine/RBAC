@@ -1,5 +1,6 @@
 # Role Based Access Control (RBAC)
-
+> For this authantification i have only Email & Password 
+> I use passport-local strategie 
 
 ## Technologies Used
 
@@ -18,7 +19,7 @@
 #### Step 1: Clone the repo
 
 ```sh
-$ git clone https://github.com/KanzariAmine/NodeJS-Authentication-JWT.git
+$ https://github.com/KanzariAmine/RBAC.git
 ```
 
 #### Step 2: Install the dependencies
